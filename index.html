@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Singapore Mobility Affordability</title>
+  <title>Introduction to Data Visualisation: Assignment 3</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -71,11 +71,15 @@
   <section class="intro">
     <h2>How Affordable is Mobility in Singapore?</h2>
     <p>
-      In the face of rising Certificate of Entitlement (COE) prices, this dashboard explores how vehicle ownership affordability in Singapore has shifted over time.
+       In the face of rising Certificate of Entitlement (COE) prices, this dashboard explores how vehicle ownership affordability in Singapore has shifted over time.
       We compare indexed trends in COE premiums, household income, public transport ridership, and taxi usage to understand broader mobility behavior.
     </p>
     <p>
       Additionally, we examine bid activity and vehicle registrations to gauge how demand and accessibility for vehicle ownership have evolved from 2010 to 2023.
+    </p>
+    <p>
+        <b>Hypothesis:</b>
+        <p>There may be an inverse correlation between income levels and </p>
     </p>
   </section>
 
@@ -104,8 +108,8 @@
   </div>
 
   <div class="caption">
-    <p><strong>Interpretation (Left):</strong> While household income has grown gradually, COE prices have accelerated far more steeply in recent years. Public transport ridership has rebounded post-pandemic, while taxi usage continues to decline.</p>
-    <p><strong>Interpretation (Right):</strong> Even as total COE bids have risen over the decade, vehicle registrations have mostly declined. This growing disparity may reflect supply constraints or affordability challenges in the market.</p>
+    <p><strong>Interpretation (Visualisation 1):</strong> While household income has grown gradually, COE prices have accelerated far more steeply in recent years. Public transport ridership has rebounded post-pandemic, while taxi usage continues to decline.</p>
+    <p><strong>Interpretation (Visualisation 2):</strong> Even as total COE bids have risen over the decade, vehicle registrations have mostly declined. This growing disparity may reflect supply constraints or affordability challenges in the market.</p>
   </div>
   
 
@@ -115,6 +119,8 @@
     <ul>
       <li>COE prices have surged faster than household incomes, indicating increased pressure on car ownership affordability.</li>
       <li>Public transport ridership has recovered steadily, positioning it as a strong alternative mode of mobility.</li>
+      <li>Global events (COVID-19) caused a significant decrease in overall public transport ridership, owing to hygiene concerns and Work From Home policies</li>
+      <li>Conversely, COE prices are observed to have increased since 2020 suggesting preference for private vehicle ownership.</li>
       <li>Despite high bidding activity, actual vehicle registrations remain lower, suggesting either limited supply or pricing exclusion.</li>
     </ul>
   </section>
@@ -124,9 +130,11 @@
     <hr style="margin: 1em 0; border: none; border-top: 1px solid #ccc;">
     <h2>Data Sources</h2>
     <ul>
-      <li><a href="#" target="_blank">Data.gov.sg – COE Bidding Results, Vehicle Registrations</a></li>
-      <li><a href="#" target="_blank">SingStat – Median Household Income</a></li>
-      <li><a href="#" target="_blank">LTA – Public Transport and Taxi Ridership</a></li>
+        <li><a href="https://data.gov.sg/datasets?query=coe+bid&page=1&resultId=d_69b3380ad7e51aff3a7dcc84eba52b8a&dataExplorerPage=179" target="_blank">Data.gov.sg – COE Bidding Results/Prices</a></li>
+        <li><a href="https://datamall.lta.gov.sg/content/datamall/en/static-data.html#Vehicle%20Registration" target="_blank">LTA – Annual New Registration of Cars by Make</a></li>
+        <li><a href="https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Public%20Transport/yearly_ave_daily_pt_ridership.csv" target="_blank">LTA – PT Utilisation (Average Daily Ridership)</a></li>
+        <li><a href="https://data.gov.sg/datasets/d_ba615ec4cc5d9f5b7800ad82057f36f1/view" target="_blank">Data.gov.sg – Public Transport Operation and Ridership</a></li>
+        <li><a href="https://tablebuilder.singstat.gov.sg/table/CT/17870" target="_blank">SingStat – Average and Median Household Income</a></li>
     </ul>
   </section>
 
