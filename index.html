@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Singapore Mobility Affordability</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .chart-container {
+      width: 90%;
+      max-width: 1000px;
+      background: white;
+      padding: 20px;
+      margin: 40px auto;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+    }
+    .controls {
+      margin-bottom: 20px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .controls label {
+      margin-right: 15px;
+    }
+    section.intro, section.conclusion, section.references {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+    }
+    .caption {
+      max-width: 900px;
+      margin: -30px auto 40px auto;
+      padding: 0 20px;
+      font-size: 0.95rem;
+      color: #444;
+    }
+    @media (max-width: 600px) {
+      h1, h2 {
+        font-size: 1.4rem;
+      }
+      .chart-container, section.intro, section.conclusion, section.references {
+        padding: 15px;
+      }
+    }
+      .viz-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .viz-grid .chart-container {
+      flex: 1 1 45%;
+      min-width: 300px;
+    }
+</style>
+</head>
+<body>
+  <h1 style="text-align:center;">Singapore Mobility Affordability</h1>
+
+  <section class="intro">
+    <h2>How Affordable is Mobility in Singapore?</h2>
+    <p>
+      In the face of rising Certificate of Entitlement (COE) prices, this dashboard explores how vehicle ownership affordability in Singapore has shifted over time.
+      We compare indexed trends in COE premiums, household income, public transport ridership, and taxi usage to understand broader mobility behavior.
+    </p>
+    <p>
+      Additionally, we examine bid activity and vehicle registrations to gauge how demand and accessibility for vehicle ownership have evolved from 2010 to 2023.
+    </p>
+  </section>
+
+  <!-- Visualisations Container -->
+  <div class="viz-grid">
+    <div class="chart-container">
+      <h2>Visualisation 1: Indexed Mobility and Affordability Trends</h2>
+      <div class="controls" id="lineControls">
+        <label><input type="checkbox" id="toggleCOE" checked> COE Price</label>
+        <label><input type="checkbox" id="toggleIncome" checked> Household Income</label>
+        <label><input type="checkbox" id="togglePT" checked> Public Transport Ridership</label>
+        <label><input type="checkbox" id="toggleTaxi" checked> Taxi Ridership</label>
+      </div>
+      <canvas id="lineChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h2>Visualisation 2: COE Bids vs Vehicle Registrations</h2>
+      <div class="controls" id="barControls">
+        <label><input type="checkbox" id="toggleBids" checked> Category A Bids</label>
+        <label><input type="checkbox" id="toggleRegs" checked> Vehicle Registrations</label>
+        <label><input type="checkbox" id="toggleTotal" checked> Total COE Bids</label>
+      </div>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <div class="caption">
+    <p><strong>Interpretation (Left):</strong> While household income has grown gradually, COE prices have accelerated far more steeply in recent years. Public transport ridership has rebounded post-pandemic, while taxi usage continues to decline.</p>
+    <p><strong>Interpretation (Right):</strong> Even as total COE bids have risen over the decade, vehicle registrations have mostly declined. This growing disparity may reflect supply constraints or affordability challenges in the market.</p>
+  </div>
+  
+
+  <!-- Conclusion Section -->
+  <section class="conclusion">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>COE prices have surged faster than household incomes, indicating increased pressure on car ownership affordability.</li>
+      <li>Public transport ridership has recovered steadily, positioning it as a strong alternative mode of mobility.</li>
+      <li>Despite high bidding activity, actual vehicle registrations remain lower, suggesting either limited supply or pricing exclusion.</li>
+    </ul>
+  </section>
+
+  <!-- References -->
+  <section class="references">
+    <hr style="margin: 1em 0; border: none; border-top: 1px solid #ccc;">
+    <h2>Data Sources</h2>
+    <ul>
+      <li><a href="#" target="_blank">Data.gov.sg – COE Bidding Results, Vehicle Registrations</a></li>
+      <li><a href="#" target="_blank">SingStat – Median Household Income</a></li>
+      <li><a href="#" target="_blank">LTA – Public Transport and Taxi Ridership</a></li>
+    </ul>
+  </section>
+
+  <script>
+    // Full JavaScript logic for both charts
+const years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+
+const coeIndexed = [100, 116.6, 122.5, 120.4, 129.6, 125.2, 106.6, 96.6, 102.2, 95.6, 89.7, 126.5, 168.7, 214.2];
+const coeTrue = [38600.7, 45035.4, 47275.7, 46465.4, 50069.5, 48393.8, 41211.5, 37304.2, 39414.9, 36894.8, 34648.2, 48839.3, 65194.6, 82717.4];
+
+const incomeIndexed = [100, 104.4, 108.0, 112.1, 115.4, 117.7, 119.8, 122.1, 126.1, 128.5, 131.5, 135.0, 140.0, 146.0];
+const incomeTrue = [65640, 68544, 70800, 73596, 75744, 77244, 78600, 80280, 82932, 84564, 86580, 88956, 92244, 96120];
+
+const ptIndexed = [100, 103.7, 106.4, 109.4, 111.8, 112.3, 116.3, 120.0, 122.8, 126.6, 94.5, 100.3, 115.6, 120.7];
+const ptTrue = [2322110000, 2408990000, 2471230000, 2541280000, 2597090000, 2608180000, 2701730000, 2790200000, 2858310000, 2942770000, 2195870000, 2327980000, 2678520000, 2799240000];
+
+const taxiIndexed = [null, null, null, null, null, null, null, null, 100.0, 99.2, 96.3, 93.2, 90.1, 88.0];
+const taxiTrue = [null, null, null, null, null, null, null, null, 180000000, 178527000, 173988000, 168447000, 162908000, 158400000];
+
+const lineDatasets = [
+  {
+    label: 'COE Price (Indexed)',
+    data: coeIndexed,
+    borderColor: 'blue',
+    backgroundColor: 'blue',
+    fill: false,
+    tension: 0.3,
+    trueData: coeTrue,
+    hidden: false
+  },
+  {
+    label: 'Household Income (Indexed)',
+    data: incomeIndexed,
+    borderColor: 'green',
+    backgroundColor: 'green',
+    fill: false,
+    tension: 0.3,
+    trueData: incomeTrue,
+    hidden: false
+  },
+  {
+    label: 'Public Transport Ridership (Indexed)',
+    data: ptIndexed,
+    borderColor: 'purple',
+    backgroundColor: 'purple',
+    fill: false,
+    tension: 0.3,
+    trueData: ptTrue,
+    hidden: false
+  },
+  {
+    label: 'Taxi Ridership (Indexed)',
+    data: taxiIndexed,
+    borderColor: 'red',
+    backgroundColor: 'red',
+    fill: false,
+    tension: 0.3,
+    trueData: taxiTrue,
+    hidden: false
+  }
+];
+
+const ctxLine = document.getElementById('lineChart').getContext('2d');
+const lineChart = new Chart(ctxLine, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: lineDatasets
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const index = context.dataIndex;
+            const indexedValue = context.parsed.y;
+            const trueValue = context.dataset.trueData[index];
+            if (indexedValue === null || trueValue === null) return null;
+            return context.dataset.label + ': ' + indexedValue.toFixed(1) + ' (True: ' + trueValue.toLocaleString() + ')';
+          }
+        }
+      },
+      legend: { display: true }
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        title: { display: true, text: 'Indexed (2010 = 100)' }
+      },
+      x: {
+        title: { display: true, text: 'Year' }
+      }
+    }
+  }
+});
+
+document.getElementById('toggleCOE').addEventListener('change', function() {
+  lineChart.data.datasets[0].hidden = !this.checked;
+  lineChart.update();
+});
+document.getElementById('toggleIncome').addEventListener('change', function() {
+  lineChart.data.datasets[1].hidden = !this.checked;
+  lineChart.update();
+});
+document.getElementById('togglePT').addEventListener('change', function() {
+  lineChart.data.datasets[2].hidden = !this.checked;
+  lineChart.update();
+});
+document.getElementById('toggleTaxi').addEventListener('change', function() {
+  lineChart.data.datasets[3].hidden = !this.checked;
+  lineChart.update();
+});
+
+const catABids = [48000, 50000, 53000, 51000, 47000, 49000, 52000, 50500, 49900, 48800, 47000, 49500, 51000, 53000];
+const registrations = [45000, 43000, 40000, 39000, 37000, 36000, 38500, 39500, 40500, 39000, 37000, 38500, 40000, 42000];
+const totalBids = [110000, 115000, 120000, 118000, 113000, 117000, 121000, 119500, 122000, 118500, 114000, 117000, 121000, 125000];
+
+const ctxBar = document.getElementById('barChart').getContext('2d');
+const barChart = new Chart(ctxBar, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'Category A Bids',
+        data: catABids,
+        backgroundColor: 'steelblue',
+        hidden: false
+      },
+      {
+        label: 'Vehicle Registrations',
+        data: registrations,
+        backgroundColor: 'lightgreen',
+        hidden: false
+      },
+      {
+        label: 'Total COE Bids (All Categories)',
+        data: totalBids,
+        type: 'line',
+        borderColor: 'orange',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.3,
+        hidden: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return context.dataset.label + ': ' + context.parsed.y.toLocaleString();
+          }
+        }
+      },
+      legend: { display: true }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Counts' }
+      },
+      x: {
+        title: { display: true, text: 'Year' }
+      }
+    }
+  }
+});
+
+document.getElementById('toggleBids').addEventListener('change', function() {
+  barChart.data.datasets[0].hidden = !this.checked;
+  barChart.update();
+});
+document.getElementById('toggleRegs').addEventListener('change', function() {
+  barChart.data.datasets[1].hidden = !this.checked;
+  barChart.update();
+});
+document.getElementById('toggleTotal').addEventListener('change', function() {
+  barChart.data.datasets[2].hidden = !this.checked;
+  barChart.update();
+});
+  </script>
+  <div style="position: relative; width: 100%; text-align: left; margin-top: 60px; font-size: 0.9rem; color: #666;">
+    <p style="margin-left: 20px;">Prepared by: <strong>Abdul Irfan Hadi bin Amir 1002685</strong></p>
+  </div>
+</body>
+</html>
